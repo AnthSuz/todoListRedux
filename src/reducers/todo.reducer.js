@@ -17,11 +17,17 @@ const toDoReducers = function(state = initialState, action) {
     }
     case Actions.EDIT_TODO: {
       console.log(11111, action.payload);
+      return (
+        state.tasks.filter(task => task.title === action.payload) && {
+          tasks: [{ title: action.payload.title, edit: true }]
+        }
+      );
+    }
+
+    case Actions.CHANGE_TODO: {
+      console.log(55555, action.payload);
       return {
-        tasks: [
-          ...state.tasks.filter(task => task !== action.payload),
-          { title: action.payload, edit: true }
-        ]
+        tasks: [...state.tasks, { title: action.payload, edit: false }]
       };
     }
 

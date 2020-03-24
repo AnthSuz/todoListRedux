@@ -37,19 +37,24 @@ function App() {
                 checked={tasks[index].done}
                 className={tasks[index].done && "taskChecked"}
               />
-              {/* {!item.edit ? ( */}
-              <label htmlFor={item.title} key={index}>
-                {item.title}
-              </label>
-              {/* // ) : (
-              //   <input type="text" value={item.title || ""} />
-              // )} */}
-              <label htmlFor={item.title} key={index}>
-                {item.title}
-              </label>
+              {!item.edit ? (
+                <p htmlFor={item.title} key={index}>
+                  {item.title}
+                </p>
+              ) : (
+                //J ARRIVE PAS A MODIFIER L EDIT
+                <input
+                  type="text"
+                  value={item.title}
+                  onChange={event => {
+                    event.preventDefault();
+                    dispatch(Actions.updateTodo(taskInput));
+                  }}
+                />
+              )}
               <button
                 onClick={() => {
-                  dispatch(Actions.deleteTodo(item));
+                  dispatch(Actions.deleteTodo(item.title));
                 }}
               >
                 X
