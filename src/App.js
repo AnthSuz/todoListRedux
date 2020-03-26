@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "./actions";
@@ -56,8 +56,13 @@ function App() {
   const editInputValue = useSelector(
     state => state.toDoReducers.editInputValue
   );
+  const movieList = useSelector(state => state.movieReducers.result);
   const dispatch = useDispatch();
   const classes = useStyles();
+
+  useEffect(() => {
+    dispatch(Actions.loadMovie());
+  }, [dispatch]);
 
   return (
     <>
@@ -150,6 +155,15 @@ function App() {
             Ajouter
           </StyledButton>
         </div>
+        <p>HELLO WORLD 1</p>
+        {movieList.length > 0 &&
+          movieList.map((item, index) => {
+            return (
+              <div key={index}>
+                <p>{item.title}</p>
+              </div>
+            );
+          })}
       </div>
     </>
   );
