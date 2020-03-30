@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
+
+// REDUX
 import { useDispatch, useSelector } from "react-redux";
 import * as Actions from "./actions";
+
+// MATERIAL UI
 import { makeStyles, withStyles } from "@material-ui/styles";
 import {
   Checkbox,
@@ -80,13 +84,28 @@ function App() {
   //-------------------
 
   //--- API .POST REDUX ---
-  const name = useSelector(state => state.postReducers.name);
-  const firstname = useSelector(state => state.postReducers.firstname);
-  const username = useSelector(state => state.postReducers.username);
-  const age = useSelector(state => state.postReducers.age);
   const valid = useSelector(state => state.postReducers.valid);
-
+  const novalid = useSelector(state => state.postReducers.novalid);
   //-------------------
+
+  const [form, setForm] = useState({
+    name: "",
+    firstname: "",
+    username: "",
+    age: ""
+  });
+
+  function handleChange(e) {
+    setForm({
+      ...form,
+      [e.target.id]: e.target.value
+    });
+  }
+
+  function handleSubmit() {
+    dispatch(Actions.submitForm(form));
+  }
+
   const dispatch = useDispatch();
   const classes = useStyles();
 
@@ -204,29 +223,41 @@ function App() {
           <TextField
             label="Name"
             variant="outlined"
-            value={name}
-            onChange={e => dispatch(Actions.inputName(e.target.value))}
+            value={form.name}
+            id="name"
+            onChange={e => {
+              handleChange(e);
+            }}
           />
           <br />
           <TextField
             label="Firstname"
             variant="outlined"
-            value={firstname}
-            onChange={e => dispatch(Actions.inputFirstname(e.target.value))}
+            value={form.firstname}
+            id="firstname"
+            onChange={e => {
+              handleChange(e);
+            }}
           />
           <br />
           <TextField
             label="Username"
             variant="outlined"
-            value={username}
-            onChange={e => dispatch(Actions.inputUsername(e.target.value))}
+            value={form.username}
+            id="username"
+            onChange={e => {
+              handleChange(e);
+            }}
           />
           <br />
           <TextField
             label="Age"
             variant="outlined"
-            value={age}
-            onChange={e => dispatch(Actions.inputAge(e.target.value))}
+            value={form.age}
+            id="age"
+            onChange={e => {
+              handleChange(e);
+            }}
           />
           <br />
           <Button
@@ -234,17 +265,13 @@ function App() {
             color="secondary"
             onClick={event => {
               event.preventDefault();
-              dispatch(Actions.createData(name, firstname, username, age));
-              dispatch(Actions.validForm(valid));
-              dispatch(Actions.inputName(""));
-              dispatch(Actions.inputFirstname(""));
-              dispatch(Actions.inputUsername(""));
-              dispatch(Actions.inputAge(""));
+              handleSubmit();
             }}
           >
             Valider
           </Button>
           {valid && <p>Formulaire envoyé</p>}
+          {novalid && <p>Ca fonctionne pas</p>}
           <br />
         </div>
       </MuiThemeProvider>
