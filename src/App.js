@@ -116,6 +116,10 @@ function App() {
     console.log(response);
   };
 
+  // FB.getLoginStatus(function (response) {
+  //   statusChangeCallback(response);
+  // });
+
   useEffect(() => {
     dispatch(Actions.loadMovie());
   }, [dispatch]);
@@ -283,7 +287,7 @@ function App() {
           <hr className={classes.hr} />
           <Typography variant="h4">Connect with facebook & google</Typography>
           <FacebookLogin
-            appId=""
+            appId="267103778007056"
             fields="name,email,picture"
             callback={responseFacebook}
           />
