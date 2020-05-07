@@ -14,12 +14,15 @@ import {
   IconButton,
   Typography,
   createMuiTheme,
-  MuiThemeProvider
+  MuiThemeProvider,
 } from "@material-ui/core";
 import green from "@material-ui/core/colors/green";
 import EditIcon from "@material-ui/icons/Edit";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+
+// FACEBOOK
+import FacebookLogin from "react-facebook-login";
 
 const useStyles = makeStyles({
   root: {
@@ -27,31 +30,31 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    maxWidth: "100%"
+    maxWidth: "100%",
   },
   list: {
     width: "25%",
     display: "flex",
     justifyContent: "space-evenly",
-    alignItems: "center"
+    alignItems: "center",
   },
   input: {
-    minWidth: 130
+    minWidth: 130,
   },
   doneTodo: {
-    textDecoration: "line-through"
+    textDecoration: "line-through",
   },
   hr: {
     size: 2,
     align: "center",
-    width: "100%"
-  }
+    width: "100%",
+  },
 });
 
 const theme = createMuiTheme({
   palette: {
-    secondary: green
-  }
+    secondary: green,
+  },
 });
 
 const StyledButton = withStyles({
@@ -63,42 +66,42 @@ const StyledButton = withStyles({
     color: "white",
     height: 56,
     padding: "0 30px",
-    boxShadow: "none"
+    boxShadow: "none",
   },
   label: {
-    textTransform: "capitalize"
-  }
+    textTransform: "capitalize",
+  },
 })(Button);
 
 function App() {
   //--- TODOLIST REDUX ---
-  const tasks = useSelector(state => state.toDoReducers.tasks);
-  const inputValue = useSelector(state => state.toDoReducers.inputValue);
+  const tasks = useSelector((state) => state.toDoReducers.tasks);
+  const inputValue = useSelector((state) => state.toDoReducers.inputValue);
   const editInputValue = useSelector(
-    state => state.toDoReducers.editInputValue
+    (state) => state.toDoReducers.editInputValue
   );
   //-------------------
 
   //--- API .GET REDUX ---
-  const movieList = useSelector(state => state.movieReducers.result);
+  const movieList = useSelector((state) => state.movieReducers.result);
   //-------------------
 
   //--- API .POST REDUX ---
-  const valid = useSelector(state => state.postReducers.valid);
-  const novalid = useSelector(state => state.postReducers.novalid);
+  const valid = useSelector((state) => state.postReducers.valid);
+  const novalid = useSelector((state) => state.postReducers.novalid);
   //-------------------
 
   const [form, setForm] = useState({
     name: "",
     firstname: "",
     username: "",
-    age: ""
+    age: "",
   });
 
   function handleChange(e) {
     setForm({
       ...form,
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     });
   }
 
@@ -108,6 +111,10 @@ function App() {
 
   const dispatch = useDispatch();
   const classes = useStyles();
+
+  const responseFacebook = (response) => {
+    console.log(response);
+  };
 
   useEffect(() => {
     dispatch(Actions.loadMovie());
@@ -126,11 +133,11 @@ function App() {
                     color="primary"
                     id={item.title}
                     checked={item.checked}
-                    onChange={e =>
+                    onChange={(e) =>
                       dispatch(
                         Actions.checkedTodo({
                           checked: e.target.checked,
-                          title: item.title
+                          title: item.title,
                         })
                       )
                     }
@@ -141,12 +148,12 @@ function App() {
                       <TextField
                         className={classes.input}
                         value={editInputValue}
-                        onChange={e =>
+                        onChange={(e) =>
                           dispatch(Actions.changeTask(e.target.value))
                         }
                       />
                       <IconButton
-                        onClick={event => {
+                        onClick={(event) => {
                           event.preventDefault();
                           dispatch(
                             Actions.updateTodo({ value: editInputValue, item })
@@ -187,7 +194,7 @@ function App() {
           <div>
             <TextField
               value={inputValue}
-              onChange={e => dispatch(Actions.changeTodo(e.target.value))}
+              onChange={(e) => dispatch(Actions.changeTodo(e.target.value))}
               label="Votre tâche"
               variant="filled"
             />
@@ -196,7 +203,7 @@ function App() {
               variant="contained"
               color="primary"
               size="large"
-              onClick={event => {
+              onClick={(event) => {
                 event.preventDefault();
                 dispatch(Actions.addTodo(inputValue));
                 dispatch(Actions.changeTodo(""));
@@ -225,7 +232,7 @@ function App() {
             variant="outlined"
             value={form.name}
             id="name"
-            onChange={e => {
+            onChange={(e) => {
               handleChange(e);
             }}
           />
@@ -235,7 +242,7 @@ function App() {
             variant="outlined"
             value={form.firstname}
             id="firstname"
-            onChange={e => {
+            onChange={(e) => {
               handleChange(e);
             }}
           />
@@ -245,7 +252,7 @@ function App() {
             variant="outlined"
             value={form.username}
             id="username"
-            onChange={e => {
+            onChange={(e) => {
               handleChange(e);
             }}
           />
@@ -255,7 +262,7 @@ function App() {
             variant="outlined"
             value={form.age}
             id="age"
-            onChange={e => {
+            onChange={(e) => {
               handleChange(e);
             }}
           />
@@ -263,7 +270,7 @@ function App() {
           <Button
             variant="contained"
             color="secondary"
-            onClick={event => {
+            onClick={(event) => {
               event.preventDefault();
               handleSubmit();
             }}
@@ -273,6 +280,13 @@ function App() {
           {valid && <p>Formulaire envoyé</p>}
           {novalid && <p>Ca fonctionne pas</p>}
           <br />
+          <hr className={classes.hr} />
+          <Typography variant="h4">Connect with facebook & google</Typography>
+          <FacebookLogin
+            appId=""
+            fields="name,email,picture"
+            callback={responseFacebook}
+          />
         </div>
       </MuiThemeProvider>
     </>
